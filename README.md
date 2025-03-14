@@ -1,7 +1,7 @@
 # TransArt: A Multimodal Application for Vernacular Language Translation and Image Synthesis
 
 ## Overview
-This project is a Gradio-based application that processes Tamil audio file to multiple AI tasks as mentioned below.
+This project is a Gradio-based application that processes Tamil audio file or live voice record Tamil audio to multiple AI tasks as mentioned below.
 
 1. **Transcription**: Tamil audio → Tamil text
 2. **Translation**: Tamil text → English text
