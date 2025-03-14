@@ -1,28 +1,4 @@
 import os
-import requests
-import io
-import gradio as gr
-from PIL import Image
-from groq import Groq
-
-
-# Getting Groq API key from the secret variable.
-GROQ_API_KEY = os.getenv("groq_api")
-
-# Initialize Groq API client
-client = Groq(api_key=GROQ_API_KEY)
-
-# Hugging Face model for Image Generation
-HF_IMAGE_MODEL = "black-forest-labs/FLUX.1-schnell"
-
-
-# Function 1: Tamil Audio to Tamil Text (Transcription)
-def transcribe_audio(audio_path):
-    if not audio_path:
-        return "Please upload an audio file."        
-    try:
-        with open(audio_path, "rb") as file:
-            transcription = client.audio.transcriptions.create(
                 file=(os.path.basename(audio_path), file.read()),
                 model="whisper-large-v3",
                 language="ta",  # Tamil
@@ -57,7 +33,7 @@ def generate_image(english_text):
         return "Please enter a description for image generation."
     try:
         payload = {"inputs": english_text}
-        response = requests.post(f"https://api-inference.huggingface.co/models/{HF_IMAGE_MODEL}", json=payload)
+        response = requests.post(f"https://api-inference.huggingface.co/models/black-forest-labs/FLUX.1-schnell", json=payload)
         response.raise_for_status()
         image_bytes = response.content
         image = Image.open(io.BytesIO(image_bytes))
@@ -114,7 +90,7 @@ iface = gr.Interface(
         gr.Image(label="Generated Image"),
         gr.Textbox(label="Generated Text from English Prompt"),
     ],
-    title="Tamil Audio to AI Processing Pipeline",
+    title="TransArt: A Multimodal Application for Vernacular Language Translation and Image Synthesis",
     description="""Upload a Tamil audio file or live voice record Tamil audio and
     get transcription, translation, image generation, and further text generation."""
 )
