@@ -1,4 +1,25 @@
 import os
+import requests
+import io
+import gradio as gr
+from PIL import Image
+from groq import Groq
+
+
+# Getting Groq API key from the secret variable.
+GROQ_API_KEY = os.getenv("groq_api")
+
+# Initialize Groq API client
+client = Groq(api_key=GROQ_API_KEY)
+
+
+# Function 1: Tamil Audio to Tamil Text (Transcription)
+def transcribe_audio(audio_path):
+    if not audio_path:
+        return "Please upload an audio file."        
+    try:
+        with open(audio_path, "rb") as file:
+            transcription = client.audio.transcriptions.create(
                 file=(os.path.basename(audio_path), file.read()),
                 model="whisper-large-v3",
                 language="ta",  # Tamil
@@ -46,12 +67,11 @@ def generate_image(english_text):
 def generate_text(english_text):
     if not english_text:
         return "Please enter a prompt."
-
-    prompt = f"Give me a brief paragraph on the topic '{english_text}'"
+ 
     try:
         response = client.chat.completions.create(
             model="deepseek-r1-distill-llama-70b",
-            messages=[{"role": "user", "content": prompt}],
+            messages=[{"role": "user", "content": english_text}],
         )
         return response.choices[0].message.content.strip()
     except Exception as e:
