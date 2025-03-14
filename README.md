@@ -33,7 +33,7 @@ You must set up the Groq API key as a secret variable.
     Value: Your Groq API key
 5. Click "Save".
 
-**NOTE:** There is no need of Hugging Face Access Token as I deployed this Gradio app in the Hugging Face Space itself. If you are going to try this code outside Hugging Face you need to provide access token.
+**NOTE:** There is no need of Hugging Face Access Token to use the image model as I deployed this Gradio app in the Hugging Face Space itself. If you are going to try this code outside Hugging Face you need to provide access token.
 
 ## Usage
 Run the script "app.py". This will launch a Gradio web interface where user can upload a Tamil audio file or live voice record Tamil audio and receive processed results.
