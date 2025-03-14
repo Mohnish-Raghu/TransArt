@@ -17,10 +17,10 @@ This project is a Gradio-based application that processes Tamil audio file or li
 | **Text Generation**      | `deepseek-r1-distill-llama-70b`        | Groq API    |
 
 ## Requirements
-**gradio**
-**requests**
-**pillow**
-**groq**
+1. **gradio**
+2. **requests**
+3. **pillow**
+4. **groq**
 
 ## Secret Variable Setup
 You must set up the Groq API key as a secret variable.
