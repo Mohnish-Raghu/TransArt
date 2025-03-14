@@ -1,27 +1,25 @@
 import os
-import gradio as gr
 import requests
 import io
+import gradio as gr
 from PIL import Image
 from groq import Groq
 
 
-# Set your API keys
+# Getting Groq API key from the secret variable.
 GROQ_API_KEY = os.getenv("groq_api")
 
 # Initialize Groq API client
 client = Groq(api_key=GROQ_API_KEY)
 
-# Hugging Face API for Image Generation
+# Hugging Face model for Image Generation
 HF_IMAGE_MODEL = "black-forest-labs/FLUX.1-schnell"
-
 
 
 # Function 1: Tamil Audio to Tamil Text (Transcription)
 def transcribe_audio(audio_path):
     if not audio_path:
-        return "Please upload an audio file."
-
+        return "Please upload an audio file."        
     try:
         with open(audio_path, "rb") as file:
             transcription = client.audio.transcriptions.create(
@@ -35,31 +33,28 @@ def transcribe_audio(audio_path):
         return f"Error in transcription: {str(e)}"
 
 
-
 # Function 2: Tamil Text to English Translation
 def translate_tamil_to_english(tamil_text):
     if not tamil_text:
         return "Please enter Tamil text for translation."
 
-    prompt = f"Translate the below Tamil text to English:\nTamil Text: {tamil_text}\nGive only the translated part as the output without any extra words."
-
+    prompt = f"""Translate the below Tamil text to English:\n
+    Tamil Text: {tamil_text}\n
+    Give only the translated part as the output without any extra words."""
     try:
         response = client.chat.completions.create(
             model="gemma2-9b-it",
             messages=[{"role": "user", "content": prompt}],
         )
         return response.choices[0].message.content.strip()
-    
     except Exception as e:
         return f"Error in translation: {str(e)}"
-
 
 
 # Function 3: English Text to Image Generation
 def generate_image(english_text):
     if not english_text:
         return "Please enter a description for image generation."
-
     try:
         payload = {"inputs": english_text}
         response = requests.post(f"https://api-inference.huggingface.co/models/{HF_IMAGE_MODEL}", json=payload)
@@ -67,10 +62,8 @@ def generate_image(english_text):
         image_bytes = response.content
         image = Image.open(io.BytesIO(image_bytes))
         return image
-
     except Exception as e:
         return f"Error in image generation: {str(e)}"
-
 
 
 # Function 4: English Text to Further Text Generation
@@ -78,16 +71,15 @@ def generate_text(english_text):
     if not english_text:
         return "Please enter a prompt."
 
+    prompt = f"Give me a brief paragraph on the topic '{english_text}'"
     try:
         response = client.chat.completions.create(
             model="deepseek-r1-distill-llama-70b",
-            messages=[{"role": "user", "content": english_text}],
+            messages=[{"role": "user", "content": prompt}],
         )
         return response.choices[0].message.content.strip()
-    
     except Exception as e:
         return f"Error in text generation: {str(e)}"
-
 
 
 # Combined Function to Process All Steps Sequentially
@@ -112,7 +104,6 @@ def process_audio(audio_path):
     return tamil_text, english_text, image, generated_text
 
 
-
 # Create Gradio Interface
 iface = gr.Interface(
     fn=process_audio,
@@ -124,10 +115,9 @@ iface = gr.Interface(
         gr.Textbox(label="Generated Text from English Prompt"),
     ],
     title="Tamil Audio to AI Processing Pipeline",
-    description="Upload a Tamil audio file and get transcription, translation, image generation, and further text generation.",
+    description="""Upload a Tamil audio file or live voice record Tamil audio and
+    get transcription, translation, image generation, and further text generation."""
 )
-
-
 
 # Launch the Gradio app
 iface.launch()
