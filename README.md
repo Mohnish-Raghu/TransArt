@@ -1,26 +1,22 @@
-# TransArt: A Multimodal Application for Vernacular Language Translation and Image Synthesis
+# TransArt: A Multimodal Application for Vernacular Language Translation and Text Generation
 
 ## Overview
 This project is a Gradio-based application that processes Tamil audio file or live voice record Tamil audio to multiple AI tasks as mentioned below.
 
 1. **Transcription**: Tamil audio → Tamil text
 2. **Translation**: Tamil text → English text
-3. **Image Generation**: English text → AI-generated image
-4. **Text Generation**: English text → Further text generation
+3. **Text Generation**: English text → Further text generation
 
 ## Models Used
 | Task                     | Model Name                              | Provider     |
 |--------------------------|----------------------------------------|-------------|
 | **Transcription**        | `whisper-large-v3`                     | Groq API    |
 | **Translation**          | `gemma2-9b-it`                         | Groq API    |
-| **Image Generation**     | `black-forest-labs/FLUX.1-schnell`     | Hugging Face |
 | **Text Generation**      | `deepseek-r1-distill-llama-70b`        | Groq API    |
 
 ## Requirements
 1. **gradio**
-2. **requests**
-3. **pillow**
-4. **groq**
+2. **groq**
 
 ## Secret Variable Setup
 You must set up the Groq API key as a secret variable.
@@ -33,8 +29,6 @@ You must set up the Groq API key as a secret variable.
     Value: Your Groq API key
 5. Click "Save".
 
-**NOTE:** There is no need of Hugging Face Access Token to use the image model as I deployed this Gradio app in the Hugging Face Space itself. If you are going to try this code outside Hugging Face you need to provide access token.
-
 ## Usage
 Run the script "app.py". This will launch a Gradio web interface where user can upload a Tamil audio file or live voice record Tamil audio and receive processed results.
 
@@ -42,5 +36,4 @@ Run the script "app.py". This will launch a Gradio web interface where user can 
 - **Tamil Audio Input:** 🎤 (User uploads an audio file or live record)
 - **Transcribed Tamil Text:** "தமிழ் உரை"
 - **Translated English Text:** "Example Tamil text"
-- **Generated Image:** 🖼️ (AI-generated image displayed)
 - **Generated Text:** "Information about the text"
